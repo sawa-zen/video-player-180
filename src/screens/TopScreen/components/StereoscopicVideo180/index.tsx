@@ -9,7 +9,6 @@ interface Props {
 export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
   const { camera } = useThree();
   const [playing, setPlaying] = useState(false)
-  const [loaded, setLoaded] = useState(false)
 
   const [video] = useState(() => {
     const vid = document.createElement("video");
@@ -17,11 +16,7 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
     vid.loop = true;
     vid.muted = false;
     vid.crossOrigin = 'anonymous';
-    vid.setAttribute('playsinline', '');
-    vid.setAttribute('webkit-playsinline', '');
-    vid.addEventListener('loadeddata', () => {
-      setLoaded(true)
-    })
+    vid.playsInline = true;
     return vid;
   })
 
@@ -38,7 +33,6 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
   // 以下のバグのせいでこの useEffect が必要
   // https://github.com/pmndrs/xr/issues/398
   useFrame(() => {
-    if (!loaded) return;
     camera.layers.set(0)
   })
 
@@ -59,12 +53,10 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
         <planeGeometry args={[0.2, 0.2, 1, 1]} />
         <meshBasicMaterial color={video.paused ? 'red' : 'green'} />
       </mesh>
-      {loaded ? (
-        <group>
-          <EyeView video={video} eye="left" />
-          <EyeView video={video} eye="right" />
-        </group>
-      ) : null}
+      <group>
+        <EyeView video={video} eye="left" />
+        <EyeView video={video} eye="right" />
+      </group>
     </>
   )
 }
