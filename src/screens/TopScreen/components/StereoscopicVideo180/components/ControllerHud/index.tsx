@@ -1,6 +1,6 @@
 import { ThreeElement } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
-import { Object3D } from "three";
+import { Object3D, TextureLoader } from "three";
 
 interface Props extends ThreeElement<typeof Object3D> {
   playing: boolean;
@@ -14,6 +14,11 @@ interface Props extends ThreeElement<typeof Object3D> {
   onClickPrev: () => void;
   onClickNext: () => void;
 }
+
+const pauseTexture = new TextureLoader().load('/icons/pause.png');
+const playTexture = new TextureLoader().load('/icons/play_arrow.png');
+const prevTexture = new TextureLoader().load('/icons/skip_previous.png');
+const nextTexture = new TextureLoader().load('/icons/skip_next.png');
 
 export const ControllerHud = ({
   playing,
@@ -37,7 +42,7 @@ export const ControllerHud = ({
       <mesh position={[-gap, 0, 0]} onClick={onClickPrev}>
         <planeGeometry args={[0.1, 0.1, 1, 1]} />
         <meshBasicMaterial
-          color={'yellow'}
+          map={prevTexture}
           opacity={hasPrev ? 1 : 0.5}
           transparent
         />
@@ -46,24 +51,24 @@ export const ControllerHud = ({
         {playing ? (
           <mesh onClick={onClickPause}>
             <planeGeometry args={[0.1, 0.1, 1, 1]} />
-            <meshBasicMaterial color={'blue'} />
+            <meshBasicMaterial map={pauseTexture} transparent />
           </mesh>
         ) : (
           <mesh onClick={onClickPlay}>
             <planeGeometry args={[0.1, 0.1, 1, 1]} />
-            <meshBasicMaterial color={'green'} />
+            <meshBasicMaterial map={playTexture} transparent />
           </mesh>
         )}
       </group>
       <mesh position={[gap, 0, 0]} onClick={onClickNext}>
         <planeGeometry args={[0.1, 0.1, 1, 1]} />
         <meshBasicMaterial
-          color={'purple'}
+          map={nextTexture}
           opacity={hasNext ? 1 : 0.5}
           transparent
         />
       </mesh>
-      <group position={[0, -0.1, 0]}>
+      <group position={[0, -0.08, 0]}>
         <mesh>
           <planeGeometry args={[0.5, 0.02, 1, 1]} />
           <meshBasicMaterial
