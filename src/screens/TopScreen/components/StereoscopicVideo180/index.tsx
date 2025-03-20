@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
-  const { camera, gl } = useThree();
+  const { camera } = useThree();
   const [playing, setPlaying] = useState(false)
   const [loaded, setLoaded] = useState(false)
 
