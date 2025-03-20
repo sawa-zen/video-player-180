@@ -7,6 +7,8 @@ interface Props extends ThreeElement<typeof Object3D> {
   chapterName: string;
   currentChapterIndex: number;
   totalChapters: number;
+  currentTime: number;
+  totalTime: number;
   onClickPlay: () => void;
   onClickPause: () => void;
   onClickPrev: () => void;
@@ -18,6 +20,8 @@ export const ControllerHud = ({
   chapterName,
   currentChapterIndex,
   totalChapters,
+  currentTime,
+  totalTime,
   onClickPlay,
   onClickPause,
   onClickPrev,
@@ -59,8 +63,18 @@ export const ControllerHud = ({
           transparent
         />
       </mesh>
+      <group position={[0, -0.1, 0]}>
+        <mesh>
+          <planeGeometry args={[0.5, 0.05, 1, 1]} />
+          <meshBasicMaterial color={'#000000'} />
+        </mesh>
+        <mesh position={[-0.25 + 0.5 * currentTime / totalTime, 0, 0]}>
+          <planeGeometry args={[0.01, 0.1, 1, 1]} />
+          <meshBasicMaterial color={'#FFFFFF'} />
+        </mesh>
+      </group>
       <Text
-        position={[0, -0.1, 0]}
+        position={[0, -0.15, 0]}
         color="#FFFFFF"
         fontSize={0.03}
         textAlign={'center'}
@@ -70,7 +84,7 @@ export const ControllerHud = ({
         {chapterName}
       </Text>
       <Text
-        position={[0, -0.13, 0]}
+        position={[0, -0.18, 0]}
         color="#FFFFFF"
         fontSize={0.02}
         textAlign={'center'}

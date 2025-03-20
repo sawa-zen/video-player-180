@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 import { ThreeElement, useFrame, useThree } from "@react-three/fiber";
-import { ChaperSphere } from "./components/ChaperSphere";
+import { ChaperSphere, LoadedMetadataEvent, ProgressEvent } from "./components/ChaperSphere";
 import { ControllerHud } from "./components/ControllerHud";
 import { Object3D } from "three";
 
@@ -15,6 +15,8 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
   const [showController, setShowController] = useState(true);
   const hasPrev = currentChapterIndex > 0;
   const hasNext = currentChapterIndex < chaptersSrc.length - 1;
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
 
   const handleClickPlay = useCallback(() => {
     setPlaying(true);
@@ -42,9 +44,29 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
     setShowController((prev) => !prev);
   }, []);
 
+  const handleVideoEnded = useCallback(() => {
+    if (hasNext) {
+      setCurrentChapterIndex((prev) => Math.min(chaptersSrc.length - 1, prev + 1));
+      setPlaying(true);
+    } else {
+      setPlaying(false);
+    }
+  }, [hasNext]);
+
+  const handleLoadedMetadata = useCallback(({ duration }: LoadedMetadataEvent) => {
+    setTotalTime(duration);
+    setCurrentTime(0);
+  }, []);
+
+  const handleProgress = useCallback(({ currentTime }: ProgressEvent) => {
+    setCurrentTime(currentTime);
+  }, []);
+
   // 以下のバグのせいでこの useEffect が必要
   // https://github.com/pmndrs/xr/issues/398
-  useFrame(() => { camera.layers.set(0) });
+  useFrame(() => {
+    camera.layers.set(0)
+  });
 
   return (
     <group {...props}>
@@ -55,18 +77,22 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
               key={src}
               src={src}
               playing={playing}
-              onEnded={handleClickNext}
+              onLoadedMetadata={handleLoadedMetadata}
+              onProgress={handleProgress}
+              onEnded={handleVideoEnded}
             />
           ) : null
         })
       }
       {showController ? (
         <ControllerHud
-          position={[0, 1, -0.5]}
+          position={[0, 1.2, -0.8]}
           playing={playing}
           chapterName={`Chapter ${currentChapterIndex + 1}`}
           currentChapterIndex={currentChapterIndex}
           totalChapters={chaptersSrc.length}
+          currentTime={currentTime}
+          totalTime={totalTime}
           onClickPlay={handleClickPlay}
           onClickPause={handleClickPause}
           onClickPrev={handleClickPrev}
