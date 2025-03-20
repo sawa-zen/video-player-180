@@ -20,9 +20,11 @@ export const ControllerHud = ({
   onClickNext,
   ...props
 }: Props) => {
+  const gap = 0.2;
+
   return (
     <group {...props}>
-      <mesh position={[-0.1, 0, 0]} onClick={onClickPrev}>
+      <mesh position={[-gap, 0, 0]} onClick={onClickPrev}>
         <planeGeometry args={[0.1, 0.1, 1, 1]} />
         <meshBasicMaterial color={'yellow'} />
       </mesh>
@@ -39,7 +41,7 @@ export const ControllerHud = ({
           </mesh>
         )}
       </group>
-      <mesh position={[0.1, 0, 0]} onClick={onClickNext}>
+      <mesh position={[gap, 0, 0]} onClick={onClickNext}>
         <planeGeometry args={[0.1, 0.1, 1, 1]} />
         <meshBasicMaterial color={'purple'} />
       </mesh>
