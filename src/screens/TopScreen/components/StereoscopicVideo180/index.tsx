@@ -32,9 +32,7 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
 
   // 以下のバグのせいでこの useEffect が必要
   // https://github.com/pmndrs/xr/issues/398
-  useFrame(() => {
-    camera.layers.set(0)
-  })
+  useFrame(() => { camera.layers.set(0) })
 
   useEffect(() => {
     return () => {
