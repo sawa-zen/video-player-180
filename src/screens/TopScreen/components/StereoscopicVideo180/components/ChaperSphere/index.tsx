@@ -10,6 +10,8 @@ export const ChaperSphere = ({ src, playing }: Props) => {
   const video = useMemo(() => {
     const vid = document.createElement("video");
     vid.src = src;
+    vid.currentTime = 0;
+    vid.autoplay = false;
     vid.loop = true;
     vid.muted = false;
     vid.crossOrigin = 'anonymous';
@@ -23,14 +25,13 @@ export const ChaperSphere = ({ src, playing }: Props) => {
     } else {
       video.pause();
     }
-  }, [video, playing])
+  }, [playing])
 
   useEffect(() => {
     return () => {
       video.pause();
-      video.src = "";
     };
-  }, [video]);
+  }, []);
 
   return (
     <group>
