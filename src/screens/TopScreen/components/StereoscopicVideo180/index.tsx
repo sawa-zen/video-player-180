@@ -9,6 +9,7 @@ interface Props {
 export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
   const { camera, gl } = useThree();
   const [playing, setPlaying] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   const [video] = useState(() => {
     const vid = document.createElement("video");
@@ -18,6 +19,9 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
     vid.crossOrigin = 'anonymous';
     vid.setAttribute('playsinline', '');
     vid.setAttribute('webkit-playsinline', '');
+    vid.addEventListener('loadeddata', () => {
+      setLoaded(true)
+    })
     return vid;
   })
 
@@ -31,24 +35,11 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
     }
   }, [video, playing])
 
+  // 以下のバグのせいでこの useEffect が必要
+  // https://github.com/pmndrs/xr/issues/398
   useFrame(() => {
-    if (gl.xr.isPresenting) {
-      camera.layers.disable(1);
-      camera.layers.disable(2);
-      const xrCamera = gl.xr.getCamera();
-      if (xrCamera.cameras.length >= 2) {
-        const [leftCam, rightCam] = xrCamera.cameras;
-
-        leftCam.layers.disableAll();
-        rightCam.layers.disableAll();
-
-        // 左目はレイヤー1だけ有効化
-        leftCam.layers.enable(1);
-
-        // 右目はレイヤー2だけ有効化
-        rightCam.layers.enable(2);
-      }
-    }
+    if (!loaded) return;
+    camera.layers.set(0)
   })
 
   useEffect(() => {
@@ -68,10 +59,12 @@ export const StereoscopicVideo180 = ({ videoSrc }: Props) => {
         <planeGeometry args={[0.2, 0.2, 1, 1]} />
         <meshBasicMaterial color={video.paused ? 'red' : 'green'} />
       </mesh>
-      <group>
-        <EyeView video={video} eye="left" />
-        <EyeView video={video} eye="right" />
-      </group>
+      {loaded ? (
+        <group>
+          <EyeView video={video} eye="left" />
+          <EyeView video={video} eye="right" />
+        </group>
+      ) : null}
     </>
   )
 }
