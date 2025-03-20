@@ -65,6 +65,8 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
           position={[0, 1, -0.5]}
           playing={playing}
           chapterName={`Chapter ${currentChapterIndex + 1}`}
+          currentChapterIndex={currentChapterIndex}
+          totalChapters={chaptersSrc.length}
           onClickPlay={handleClickPlay}
           onClickPause={handleClickPause}
           onClickPrev={handleClickPrev}
