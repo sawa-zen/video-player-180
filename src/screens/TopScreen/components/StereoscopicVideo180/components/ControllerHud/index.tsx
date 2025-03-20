@@ -65,11 +65,15 @@ export const ControllerHud = ({
       </mesh>
       <group position={[0, -0.1, 0]}>
         <mesh>
-          <planeGeometry args={[0.5, 0.05, 1, 1]} />
-          <meshBasicMaterial color={'#000000'} />
+          <planeGeometry args={[0.5, 0.02, 1, 1]} />
+          <meshBasicMaterial
+            color={'#000000'}
+            opacity={0.5}
+            transparent
+          />
         </mesh>
-        <mesh position={[-0.25 + 0.5 * currentTime / totalTime, 0, 0]}>
-          <planeGeometry args={[0.01, 0.1, 1, 1]} />
+        <mesh position={[-0.25 + 0.5 * currentTime / totalTime, 0, 0.005]}>
+          <planeGeometry args={[0.01, 0.02, 1, 1]} />
           <meshBasicMaterial color={'#FFFFFF'} />
         </mesh>
       </group>
