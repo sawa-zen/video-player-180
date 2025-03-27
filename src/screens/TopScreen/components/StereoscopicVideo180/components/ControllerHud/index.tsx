@@ -4,7 +4,7 @@ import { Object3D, TextureLoader } from "three";
 
 interface Props extends ThreeElement<typeof Object3D> {
   playing: boolean;
-  chapterName: string;
+  chapterTitle: string;
   currentChapterIndex: number;
   totalChapters: number;
   currentTime: number;
@@ -22,7 +22,7 @@ const nextTexture = new TextureLoader().load('/icons/skip_next.png');
 
 export const ControllerHud = ({
   playing,
-  chapterName,
+  chapterTitle,
   currentChapterIndex,
   totalChapters,
   currentTime,
@@ -90,7 +90,7 @@ export const ControllerHud = ({
         anchorX="center"
         anchorY="middle"
       >
-        {chapterName}
+        {chapterTitle}
       </Text>
       <Text
         position={[0, -0.18, 0]}

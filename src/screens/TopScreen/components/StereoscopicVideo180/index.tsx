@@ -4,17 +4,22 @@ import { ChaperSphere, LoadedMetadataEvent, ProgressEvent } from "./components/C
 import { ControllerHud } from "./components/ControllerHud";
 import { Object3D } from "three";
 
-interface Props extends ThreeElement<typeof Object3D> {
-  chaptersSrc: string[];
+export interface Chapter {
+  title: string
+  src: string
 }
 
-export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
+interface Props extends ThreeElement<typeof Object3D> {
+  chapters: Chapter[];
+}
+
+export const StereoscopicVideo180 = ({ chapters, ...props }: Props) => {
   const { camera } = useThree();
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [playing, setPlaying] = useState(false)
   const [showController, setShowController] = useState(true);
   const hasPrev = currentChapterIndex > 0;
-  const hasNext = currentChapterIndex < chaptersSrc.length - 1;
+  const hasNext = currentChapterIndex < chapters.length - 1;
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
 
@@ -35,7 +40,7 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
 
   const handleClickNext = useCallback(() => {
     if (hasNext) {
-      setCurrentChapterIndex((prev) => Math.min(chaptersSrc.length - 1, prev + 1));
+      setCurrentChapterIndex((prev) => Math.min(chapters.length - 1, prev + 1));
       setPlaying(true);
     }
   }, [hasNext]);
@@ -46,7 +51,7 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
 
   const handleVideoEnded = useCallback(() => {
     if (hasNext) {
-      setCurrentChapterIndex((prev) => Math.min(chaptersSrc.length - 1, prev + 1));
+      setCurrentChapterIndex((prev) => Math.min(chapters.length - 1, prev + 1));
       setPlaying(true);
     } else {
       setPlaying(false);
@@ -71,11 +76,11 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
   return (
     <group {...props}>
       {
-        chaptersSrc.map((src, index) => {
+        chapters.map((chapter, index) => {
           return index === currentChapterIndex ? (
             <ChaperSphere
-              key={src}
-              src={src}
+              key={chapter.src}
+              src={chapter.src}
               playing={playing}
               onLoadedMetadata={handleLoadedMetadata}
               onProgress={handleProgress}
@@ -88,9 +93,9 @@ export const StereoscopicVideo180 = ({ chaptersSrc, ...props }: Props) => {
         <ControllerHud
           position={[0, 1.2, -0.8]}
           playing={playing}
-          chapterName={`Chapter ${currentChapterIndex + 1}`}
+          chapterTitle={chapters[currentChapterIndex].title}
           currentChapterIndex={currentChapterIndex}
-          totalChapters={chaptersSrc.length}
+          totalChapters={chapters.length}
           currentTime={currentTime}
           totalTime={totalTime}
           onClickPlay={handleClickPlay}
