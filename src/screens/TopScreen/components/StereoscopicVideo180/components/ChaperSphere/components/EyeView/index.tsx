@@ -29,8 +29,9 @@ export const EyeView = ({ video, eye }: Props) => {
     }
   }, [eye])
 
+  // X軸のスケールを反転させて正しい向きのテクスチャを表示
   return (
-    <mesh rotation={[0, Math.PI, 0]} ref={meshRef}>
+    <mesh rotation={[0, Math.PI, 0]} scale={[-1, 1, 1]} ref={meshRef}>
       <sphereGeometry args={[20, 64, 64, 0, Math.PI]} />
       <shaderMaterial
         uniforms={{ map: { value: texture }, eyeIndex: { value: eyeIndex } }}
