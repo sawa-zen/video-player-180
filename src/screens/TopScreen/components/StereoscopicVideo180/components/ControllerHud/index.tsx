@@ -15,10 +15,10 @@ interface Props extends ThreeElement<typeof Object3D> {
   onClickNext: () => void;
 }
 
-const pauseTexture = new TextureLoader().load('https://webxr-video-player.sawa-zen.dev/icons/pause.png');
-const playTexture = new TextureLoader().load('https://webxr-video-player.sawa-zen.dev/icons/play_arrow.png');
-const prevTexture = new TextureLoader().load('https://webxr-video-player.sawa-zen.dev/icons/skip_previous.png');
-const nextTexture = new TextureLoader().load('https://webxr-video-player.sawa-zen.dev/icons/skip_next.png');
+const pauseTexture = new TextureLoader().load('https://pub-62a77f8db06f43fa8e06c176ccdd5854.r2.dev/icons/pause.png');
+const playTexture = new TextureLoader().load('https://pub-62a77f8db06f43fa8e06c176ccdd5854.r2.dev/icons/play_arrow.png');
+const prevTexture = new TextureLoader().load('https://pub-62a77f8db06f43fa8e06c176ccdd5854.r2.dev/icons/skip_previous.png');
+const nextTexture = new TextureLoader().load('https://pub-62a77f8db06f43fa8e06c176ccdd5854.r2.dev/icons/skip_next.png');
 
 export const ControllerHud = ({
   playing,
