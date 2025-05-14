@@ -101,7 +101,7 @@ export const StereoscopicVideo180 = ({ chapters, ...props }: Props) => {
       {showController ? (
         <>
           <ControllerHud
-            position={[0, 1.15, -0.8]}
+            position={[0, 1.12, -0.8]}
             playing={playing}
             chapterTitle={chapters[currentChapterIndex].title}
             currentChapterIndex={currentChapterIndex}
@@ -115,7 +115,7 @@ export const StereoscopicVideo180 = ({ chapters, ...props }: Props) => {
           />
           <ChaptersHud
             chapters={chapters}
-            position={[-0.5, 1.2, -0.55]}
+            position={[-0.5, 1.12, -0.55]}
             rotation={[0, Math.PI / 4, 0]}
             onClickChapter={handleClickChapter}
           />
