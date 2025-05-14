@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 import { ThreeElement, useFrame, useThree } from "@react-three/fiber";
 import { ChaperSphere, LoadedMetadataEvent, ProgressEvent } from "./components/ChaperSphere";
 import { ControllerHud } from "./components/ControllerHud";
+import { ChaptersHud } from "./components/ChaptersHud";
 import { Object3D } from "three";
 
 export interface Chapter {
@@ -67,6 +68,14 @@ export const StereoscopicVideo180 = ({ chapters, ...props }: Props) => {
     setCurrentTime(currentTime);
   }, []);
 
+  const handleClickChapter = useCallback((chapter: Chapter) => {
+    const index = chapters.findIndex((c) => c.title === chapter.title);
+    if (index !== -1) {
+      setCurrentChapterIndex(index);
+      setPlaying(true);
+    }
+  }, [chapters]);
+
   // 以下のバグのせいでこの useEffect が必要
   // https://github.com/pmndrs/xr/issues/398
   useFrame(() => {
@@ -90,19 +99,27 @@ export const StereoscopicVideo180 = ({ chapters, ...props }: Props) => {
         })
       }
       {showController ? (
-        <ControllerHud
-          position={[0, 1.2, -0.8]}
-          playing={playing}
-          chapterTitle={chapters[currentChapterIndex].title}
-          currentChapterIndex={currentChapterIndex}
-          totalChapters={chapters.length}
-          currentTime={currentTime}
-          totalTime={totalTime}
-          onClickPlay={handleClickPlay}
-          onClickPause={handleClickPause}
-          onClickPrev={handleClickPrev}
-          onClickNext={handleClickNext}
-        />
+        <>
+          <ControllerHud
+            position={[0, 1.15, -0.8]}
+            playing={playing}
+            chapterTitle={chapters[currentChapterIndex].title}
+            currentChapterIndex={currentChapterIndex}
+            totalChapters={chapters.length}
+            currentTime={currentTime}
+            totalTime={totalTime}
+            onClickPlay={handleClickPlay}
+            onClickPause={handleClickPause}
+            onClickPrev={handleClickPrev}
+            onClickNext={handleClickNext}
+          />
+          <ChaptersHud
+            chapters={chapters}
+            position={[-0.5, 1.2, -0.55]}
+            rotation={[0, Math.PI / 4, 0]}
+            onClickChapter={handleClickChapter}
+          />
+        </>
       ) : null}
       {/* 不可視の大きなプレーンをシーンの背後に配置 */}
       <mesh
